@@ -1,0 +1,189 @@
+<html>
+        <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <style>
+                .footer {
+                   position: fixed;
+                   left: 0;
+                   bottom: 0;
+                   width: 100%;
+                   background-color: black;
+                   color: white;
+                   text-align: center;
+                }
+                </style>
+            </head>
+        <head>
+    
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                <link rel="stylesheet" type="text/css" href="css/ionic.css">
+                <script type="text/javascript" src="js/jquery.js"></script>
+                                </head>
+            
+            <body>
+                
+            <nav class="navbar navbar-inverse">
+                    <div class="container-fluid">
+                      <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>                        
+                        </button>
+                        <a class="navbar-brand" href="#">Library Q</a>
+                      </div>
+                      <div class="collapse navbar-collapse" id="myNavbar">
+                        <ul class="nav navbar-nav">
+                          <li class=""><a href="index.html">Home</a></li>
+                          <li class="dropdown-active">
+                            <a class="dropdown-active" data-toggle="dropdown" href="#">Input <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="buku.html">Input Buku</a></li>
+                                <li><a href="anggota.html">Input Anggota</a></li>
+                                <li><a href="peminjaman.html">Transaksi Peminjaman</a></li>
+                            </ul>
+                          </li>
+                          <li class="dropdown">
+                          <a class="dropdown-toggle" data-toggle="dropdown" href="#">List <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                    <li><a href="readjson-buku.html">List Buku</a></li>
+                                    <li><a href="readjson-anggota.html">List Anggota</a></li>
+                                    <li><a href="readjson-pinjam.html">List Peminjaman</a></li>
+                          </ul>
+                        </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </nav> 
+                  </body>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/ionic.css">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/geturi.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var id = decodeURI(getUrlVars()["id"]);
+        var nama_anggota = decodeURI(getUrlVars()["nama_anggota"]);
+        var alamat = decodeURI(getUrlVars()["alamat"]);
+        var no_hp = decodeURI(getUrlVars()["no_hp"]);
+        $("#id").val(id);
+        $("#nama_anggota").val(nama_anggota);
+        $("#alamat").val(alamat);
+        $("#no_hp").val(no_hp);
+        $("#update").click(function() {
+            var id = $("#id").val();
+            var nama_anggota = $("#nama_anggota").val();
+            var alamat = $("#alamat").val();
+            var no_hp = $("#no_hp").val();
+            var dataString = "id=" + id + "&nama_anggota=" + nama_anggota + "&alamat=" + alamat + "&no_hp=" + no_hp + "&update=";
+            $.ajax({
+                type: "POST",
+                url: "https://perpustakaan.infoakademik.xyz/update-anggota.php",
+                data: dataString,
+                crossDomain: true,
+                cache: false,
+                beforeSend: function() {
+                    $("#update").val('Connecting...');
+                },
+                success: function(data) {
+                    if (data == "success") {
+                        alert("Updated");
+                        $("#update").val("Update");
+                    } else if (data == "error") {
+                        alert("error");
+                    }
+                }
+            });
+
+        });
+        $("#delete").click(function() {
+            var id = $("#id").val();
+            var dataString = "id=" + id + "&delete=";
+            $.ajax({
+                type: "GET",
+                url: "https://perpustakaan.infoakademik.xyz/delete-anggota.php",
+                data: dataString,
+                crossDomain: true,
+                cache: false,
+                beforeSend: function() {
+                    $("#delete").val('Connecting...');
+                },
+                success: function(data) {
+                    if (data == "success") {
+                        alert("Deleted");
+                        $("#delete").val("Delete");
+                    } else if (data == "error") {
+                        alert("error");
+                    }
+                }
+            });
+
+        });
+    });
+    </script>
+</head>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/ionic.css">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("#insert").click(function() {
+            var tanggalpinjam = $("#tanggalpinjam").val();
+            var tanggalkembali = $("#tanggalkembali").val();
+            var denda = $("#denda").val();
+            var dataString = "tanggalpinjam=" + tanggalpinjam + "&tanggalkembali=" + tanggalkembali + "&denda=" + denda + "&insert=";
+            if ($.trim(tanggalpinjam).length > 0 & $.trim(tanggalkembali).length > 0 & $.trim(denda).length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "https://perpustakaan.infoakademik.xyz/insert-peminjaman.php",
+                    data: dataString,
+                    crossDomain: true,
+                    cache: false,
+                    beforeSend: function() {
+                        $("#insert").val('Connecting...');
+                    },
+                    success: function(data) {
+                        if (data == "success") {
+                            alert("inserted");
+                            $("#insert").val('submit');
+                        } else if (data == "error") {
+                            alert("error");
+                        }
+                    }
+                });  
+            }
+            return false;
+        });
+    });
+    </script>
+</head>
+
+<body>
+
+    <div class="list">
+        <input type="hidden" id="id" value="" />
+        <div class="item">
+            <label>Tanggal Pinjam</label>
+            <input type="text" id="tanggalpinjam" value="" />
+        </div>
+        <div class="item">
+            <label>Tanggal Kembali</label>
+            <input type="text" id="tanggalkembali" value="" />
+        </div>
+        <div class="item">
+            <label>Denda</label>
+            <input type="text" id="denda" value="" />
+        </div>
+        <div class="item">
+            <input type="button" id="insert" class="button button-block" value="insert" />
+        </div>
+    </div>
+</body>
+<div class="footer">
+        <p>Listyani Praptining P 15.01.53.0013</p>
+        <p>Apriana Panca K 15.01.53.0065</p>
+        <p>Fadilla Maulida 15.01.53.0082</p>
+      </div>
+</html>
